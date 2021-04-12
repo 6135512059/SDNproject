@@ -28,18 +28,18 @@ from mininet.util import dumpNetConnections
 from time import sleep
 import os
 def printConnections( switches ):
-"Compactly print connected nodes to each switch"
-for sw in switches:
-    print '%s:' % sw,
-    for intf in sw.intfList():
-        link = intf.link
-            if link:
-                intfs = [ link.intf1, link.intf2 ]
-                if intfs[ 0 ].node != sw:
-                    intfs.reverse()
-                local, remote = intfs
-                print remote.node,
-    print
+    "Compactly print connected nodes to each switch"
+    for sw in switches:
+        print '%s:' % sw,
+        for intf in sw.intfList():
+            link = intf.link
+                if link:
+                    intfs = [ link.intf1, link.intf2 ]
+                    if intfs[ 0 ].node != sw:
+                        intfs.reverse()
+                    local, remote = intfs
+                    print remote.node,
+        print
 class RYUBridge( Controller ):
     "Custom Controller class to invoke my RYU simple_switch_13"
     def start( self ):
