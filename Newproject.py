@@ -18,8 +18,7 @@ numbers used by OVS.
 Good luck!
 """
 from mininet.net import Mininet
-from mininet.node import Controller, RemoteController, OVSSwitch,
-OVSKernelSwitch, OVSLegacyKernelSwitch, UserSwitch
+from mininet.node import Controller, RemoteController, OVSSwitch, OVSKernelSwitch, UserSwitch
 from mininet.topo import LinearTopo
 from mininet.cli import CLI
 from mininet.log import setLogLevel
@@ -33,12 +32,12 @@ def printConnections( switches ):
         print '%s:' % sw,
         for intf in sw.intfList():
             link = intf.link
-                if link:
-                    intfs = [ link.intf1, link.intf2 ]
-                    if intfs[ 0 ].node != sw:
-                        intfs.reverse()
-                    local, remote = intfs
-                    print remote.node,
+            if link:
+               intfs = [ link.intf1, link.intf2 ]
+               if intfs[ 0 ].node != sw:
+                  intfs.reverse()
+               local, remote = intfs
+               print remote.node,
         print
 class RYUBridge( Controller ):
     "Custom Controller class to invoke my RYU simple_switch_13"
@@ -51,14 +50,13 @@ class RYUBridge( Controller ):
         self.cmd( 'kill %' + self.ryu )
 controllers = { 'ryubridge': RYUBridge}
 def topology():
-        "Create a network."
-        net = Mininet( controller=RYUBridge, link=TCLink,
-            switch=MobilitySwitch )
-    print " --------------- 6135512059 TEST --------"
-    print " *** Create Ruy Controller ***"
+    "Create a network."
+    net = Mininet( controller=RYUBridge, link=TCLink, switch = MobilitySwitch )
+#    print " --------------- 6135512059 TEST --------"
+#    print " *** Create Ruy Controller ***"
         #Add Controller
     c1 = net.addController( 'c1', controller=RYUBridge, ip='::1', port=6633 )
-            print " **** Create Switchs **** "
+#            print " **** Create Switchs **** "
     #Add SwitchsFFF
     s1 = net.addSwitch( 's1',switch=UserSwitch, mac='00:00:00:11:00:00' )
     s2 = net.addSwitch( 's2', switch=UserSwitch, mac='00:00:00:22:00:00' )
@@ -67,13 +65,13 @@ def topology():
     LMA1 = net.addHost( 'LMA1', mac='00:00:00:00:22:00')
     MAG1 = net.addHost( 'MAG1', mac='00:00:00:00:33:00')
     MAG2 = net.addHost( 'MAG2', mac='00:00:00:00:44:00')
-    print " **** Create Hosts **** "
+#    print " **** Create Hosts **** "
     #Add Hosts
     MN = net.addHost('MN', mac = '00:00:00:00:00:11')
     CN = net.addHost('CN', mac = '00:00:00:00:00:22')
     h2 = net.addHost('h2', mac = '00:00:00:00:00:33')
     #Create Links
-    print "*** Creating links"
+ #   print "*** Creating links"
     net.addLink( s1, LMA1, 1, 0, bw=10 )
     net.addLink( s1, MAG1, 2, 0, bw=10 )
     net.addLink( s1, MAG2, 3, 0, bw=10 )
@@ -82,14 +80,14 @@ def topology():
     net.addLink( s2, MN, 2, 0, bw=10 )
     net.addLink( MAG2, s3, 1, 1, bw=10 )
     net.addLink( s3, h2, 2, 0, bw=10 )
-    print "*** Starting network"
+  #  print "*** Starting network"
     net.build()
     s1.start( [c1] )
     s2.start( [c1] )
     s3.start( [c1] )
     c1.start()
     #Create Links
-    print "*** Creating links"
+   # print "*** Creating links"
     net.addLink( s1, LMA1, 1, 0, bw=10 )
     net.addLink( s1, MAG1, 2, 0, bw=10 )
     net.addLink( s1, MAG2, 3, 0, bw=10 )
@@ -98,7 +96,7 @@ def topology():
     net.addLink( s2, MN, 2, 0, bw=10 )
     net.addLink( MAG2, s3, 1, 1, bw=10 )
     net.addLink( s3, h2, 2, 0, bw=10 )
-    print "*** Starting network"
+   # print "*** Starting network"
     net.build()
     s1.start( [c1] )
     s2.start( [c1] )
@@ -122,7 +120,7 @@ def topology():
     hintf, sintf = MN.connectionsTo( s2 )[0]
     last = s2
     print "*** Running CLI"
-        CLI( net ) #for start PMIPv6 Service /SDN-Mobility Service
+    CLI( net ) #for start PMIPv6 Service /SDN-Mobility Service
     # Simple test of mobility
     print
     for s in 3, 2, 3, 2, 3: #sw2-->sw3-->sw2
@@ -139,13 +137,12 @@ def topology():
         print '* New network:'
         print MN.cmd( 'ifconfig MN-eth0 down' )
         print MN.cmd( 'ifconfig MN-eth0 up' )
-            printConnections( net.switches )
+        printConnections( net.switches )
         last = next
         #end moving code
         CLI ( net )
     CLI (net)
-        print "*** Stopping network"
-        net.stop()
+    net.stop()
 if __name__ == '__main__':
     setLogLevel( 'info' )
     topology()
